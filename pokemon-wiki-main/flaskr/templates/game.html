@@ -1,0 +1,84 @@
+{% extends "main.html" %}
+
+{% block page_name %}
+Who's that pokemon?
+{% endblock %}
+
+{% block content %}
+
+<div  class="game_background" >
+    <div class="stats">
+        <span id="score" class="score">score: {{user['points']}} </span>
+        <span id="rank" class="rank"> rank: {{user['rank']}} </span>
+    </div>
+    <div class="image_div">
+        <img id="pokemon_image" src="data:image/jpg;base64,{{image}}" class="pokemon_image">
+    </div>
+
+    <div>
+        <form id="game_form" class="game_form" method="POST" action="/game">
+            <input type="hidden" id="username" name="username" value="{{current_user.username}}">
+            <input type="hidden" id="data" name="data" value="{{data}}">
+            <input type="hidden" id="correct" name="correct" value="{{answer}}">
+            <input type="hidden" id="points" name="points" value="{{user['points']}}">
+            <input type="hidden" id="rank" name="rank" value="{{user['rank']}}">
+            <input type="hidden" id="user_name" name="user_name" value="{{user['name']}}">
+            <input type="text" class="user_guess" id="user_guess" name="user_guess" value="Who's that pokemon?" onfocus="this.value=''">
+            <input type="image" src="data:image/jpg;base64,{{pokeball}}" alt="Submit" id="pokeball" class="pokeball">
+
+        </form>
+    </div>
+    <div id="skip" class="skip">
+        Skip        
+    </div>
+
+</div>
+<script>
+    /* necessary vars */
+    var attempts = 0;
+    var pokemon_image = document.getElementById('pokemon_image');
+    var guess = document.getElementById('user_guess');
+    var skip = document.getElementById('skip');
+    var form = document.getElementById('game_form');
+    var correct = document.getElementById('correct');
+
+    /* The skip button submits the form in order to get the next element */
+    skip.onclick = function () {
+        form.submit();
+    }
+
+    form.addEventListener("submit", function(e) {
+        e.preventDefault()
+        /*Obtain guess and correct answer in order to compare and see it is correct*/
+        var best_guess = form['user_guess'].value;
+        var correct_string = form['data'].value;
+
+        console.log(best_guess);
+        console.log(correct.value.toUpperCase());
+
+        if( correct.value.toUpperCase() == best_guess.toUpperCase() ){
+            pokemon_image.classList.add('reveal');
+        }else{
+            /* Attempts greater than one reveal a skip button */
+            attempts = attempts + 1;
+            console.log(attempts);
+            /* if the user did not enter anything then prompt is displayed again */
+            if(guess.value.length == 0) {
+                form['user_guess'].value ="Who's that pokemon?";
+            }
+            /* shake animation because answer was wrong, wait for animation to end */
+            guess.classList.add('shake');
+            guess.addEventListener("animationend", () => {
+                guess.classList.remove('shake');
+            });
+        }
+        /* reveal the skip button */
+        if( attempts >= 1 ) {skip.classList.add('reveal');}
+        /* when form submits the pokemon is revealed */
+        pokemon_image.addEventListener("animationend", () => {form.submit();});
+       
+    })
+    
+ </script>
+
+{% endblock %}

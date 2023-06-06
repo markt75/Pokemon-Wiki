@@ -1,0 +1,35 @@
+<!--This module contains all the visible data that users use to interact with the login page.
+    
+    Shows login form, flashed messages and a sign up link.
+-->
+{% extends 'main.html' %}
+
+{% block page_name %}
+Login
+{% endblock %}
+
+{% block content %}
+
+<!-- Shows flashed messages -->
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <p class="flash">{{message}}</p>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+<div class="account">
+    <div class="account-window">
+        <h1>Log In</h1>
+        <!-- Shows Login form -->
+        <form class="account-form" method="POST", action="">
+            {{form.csrf_token}}
+            {{form.username}}
+            {{form.password}}
+            {{form.submit}}
+        </form>
+        <!-- Sign up link -->
+        Need to create an account? <a href="{{url_for('signup')}}">Sign Up</a>
+    </div>
+</div>
+{% endblock %}

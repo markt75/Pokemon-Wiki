@@ -1,0 +1,66 @@
+{% extends "main.html" %}
+
+{% block page_name %}
+Wiki Pages
+{% endblock %}
+
+{% block content %}
+<div class="search-filter-container">
+    <form class="filter-form" action="" method="POST">
+        <div class="search-sorting">
+            <div class="search">
+                <input type="text" placeholder="Search for Pokemon.." name="search">
+                <input type="submit" value="Search">
+            </div>
+            <div class ="sorting">
+                <select class="sorting" name="sorting">
+                    <option value="">Select a Sorting Option</option>
+                    <optgroup label="Sort by Level">
+                        <option value="LowestToHighest">Lowest to Highest</option>
+                        <option value="HighestToLowest">Highest to Lowest</option> 
+                    </optgroup>
+                </select>
+                <input type="submit" value="Apply">
+            </div>
+        </div>
+
+        <div class="pages">
+            <div>
+                <h3>Wiki Pages</h3>
+            </div>
+            <div class="user-pages">
+                {% for page in pages %}
+                    <a href="{{page}}">{{ (page[6:]).capitalize()}}</a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <input class="apply" type="submit" value="Apply">
+            <div class="filter-options">
+                <div>
+                    <p id="type-category">Type</p>
+                    {% for type in categories["types"] %}
+                        <input type="checkbox" class="types-check" name="type" id="{{type}}" value="{{type}}">
+                        <label for="{{type}}">{{type}}</label>
+                    {% endfor %}
+                </div>
+                <div>
+                    <p id="region-category">Region</p>
+                    {% for region in categories["regions"] %}
+                        <input type="checkbox" class="regions-check" name="region" id="{{region}}" value="{{region}}">
+                        <label for="{{region}}">{{region}}</label>
+                    {% endfor %}
+                </div>
+                <div>
+                    <p id="nature-category">Nature</p>
+                    {% for nature in categories["natures"] %}
+                    <input type="checkbox" class="natures-check" name="nature" id="{{nature}}" value="{{nature}}">
+                    <label for="{{nature}}">{{nature}}</label>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
